@@ -2,9 +2,12 @@ from setuptools import setup, find_packages
 
 setup(
     name="backup_uploader",
-    packages=find_packages(include="backup_uploader"),
+    packages=find_packages(include=[
+        "backup_uploader",
+        "backup_uploader.clients",
+    ]),
     license="MIT",
-    version="0.0.2",
+    version="0.0.4",
     url="https://github.com/aspedrosa/BackupsUploader",
     author="André Pedrosa",
     author_email="aspedr0sa@protonmail.com",
