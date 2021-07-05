@@ -67,55 +67,49 @@ def parse_chain_config_file(config_text, chain: BackupChain):
 
 
 class InvalidChainConfig(Exception):
-    pass
+    def __init__(self, exceptions):
+        self.message = '; '.join(ex.message for ex in exceptions)
 
 
 class EmptyConfig(InvalidChainConfig):
     def __init__(self):
-        super(EmptyConfig, self).__init__(
-            f"Empty chain config was provided"
-        )
+        self.message = "Empty chain config was provided"
+        super(InvalidChainConfig, self).__init__()
 
 
 class MissingMandatoryField(InvalidChainConfig):
     def __init__(self, missing_keys, directory_position):
-        super(MissingMandatoryField, self).__init__(
-            f'Missing mandatory key(s) {", ".join(missing_keys)} on directory in position {directory_position}'
-        )
+        self.message = f'Missing mandatory key(s) {", ".join(missing_keys)} on directory in position {directory_position}'
+        super(InvalidChainConfig, self).__init__()
 
 
 class DuplicatedDirectoryName(InvalidChainConfig):
     def __init__(self, duplicated_names):
-        super(DuplicatedDirectoryName, self).__init__(
-            f"The directory name(s) {', '.join(duplicated_names)} are duplicated"
-        )
+        self.message = f"The directory name(s) {', '.join(duplicated_names)} are duplicated"
+        super(InvalidChainConfig, self).__init__()
 
 
 class InvalidStrftimeFormat(InvalidChainConfig):
     def __init__(self, format, directory_position):
-        super(InvalidStrftimeFormat, self).__init__(
-            f'Invalid strftime format "{format}" on directory in position {directory_position}'
-        )
+        self.message = f'Invalid strftime format "{format}" on directory in position {directory_position}'
+        super(InvalidChainConfig, self).__init__()
 
 
 class InvalidIntegerFormat(InvalidChainConfig):
     def __init__(self, directory_position):
-        super(InvalidIntegerFormat, self).__init__(
-            f'Invalid integers on key(s) {DIRECTORY_CAPACITY} and/or '
-            f'{DIRECTORY_COUNTER_MAX} on directory in position {directory_position}'
-        )
+        self.message = f'Invalid integers on key(s) {DIRECTORY_CAPACITY} and/or ' \
+                       f'{DIRECTORY_COUNTER_MAX} on directory in position {directory_position}'
+        super(InvalidChainConfig, self).__init__()
 
 
 class InvalidFieldCombination(InvalidChainConfig):
     def __init__(self, directory_position):
-        super(InvalidFieldCombination, self).__init__(
-            f"Directory on position {directory_position} must have either 2 (last directory) "
-            "or 4 (intermediate directory) fields"
-        )
+        self.message = f"Directory on position {directory_position} must have either 2 (last directory) " \
+                       f"or 4 (intermediate directory) fields"
+        super(InvalidChainConfig, self).__init__()
 
 
 class DirectoriesAfterLast(InvalidChainConfig):
     def __init__(self, directory_position):
-        super(DirectoriesAfterLast, self).__init__(
-            f"There are directories defined after a LastDirectory, defined on position {directory_position}"
-        )
+        self.message = f"There are directories defined after a LastDirectory, defined on position {directory_position}"
+        super(InvalidChainConfig, self).__init__()

@@ -4,7 +4,7 @@ setup(
     name="backup_uploader",
     packages=find_packages(include="backup_uploader"),
     license="MIT",
-    version="0.0.1",
+    version="0.0.2",
     url="https://github.com/aspedrosa/BackupsUploader",
     author="André Pedrosa",
     author_email="aspedr0sa@protonmail.com",
@@ -25,8 +25,14 @@ setup(
         'Programming Language :: Python :: 3 :: Only',
         'Topic :: Utilities',
     ],
-    extra_require={
+    include_package_data=True,
+    install_requires=["click"],
+    extras_require={
         "dropbox": ["dropbox"],
         "mega": ["mega.py"],
-    }
+    },
+    entry_points="""
+    [console_scripts]
+    backup_uploader=backup_uploader.cli:main
+    """,
 )
