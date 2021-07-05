@@ -4,10 +4,11 @@ setup(
     name="backup_uploader",
     packages=find_packages(include=[
         "backup_uploader",
-        "backup_uploader.clients",
+        "backup_uploader.clients.dropbox",
+        "backup_uploader.clients.mega",
     ]),
     license="MIT",
-    version="0.0.4",
+    version="0.0.5",
     url="https://github.com/aspedrosa/BackupsUploader",
     author="André Pedrosa",
     author_email="aspedr0sa@protonmail.com",
