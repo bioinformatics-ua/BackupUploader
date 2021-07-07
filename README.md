@@ -68,10 +68,14 @@ This package makes an executable `backup_uploader` available that expects 5 requ
 Example:
 
 ```shell
-backup_uploader website_backups dropbox creadentials.txt week:%d:7:7;other;%d backup.tar.gz
+backup_uploader website_backups dropbox creadentials.txt "week:%d:7:7;other;%d" backup.tar.gz
 ```
 
-**Important note:** to ensure that the script can access the counters directory this script should be run by a user that belongs to the `backup_uploader` group.
+**Important notes:**
+
+1. to ensure that the script can access the counters directory this script should be run by a user that belongs to the `backup_uploader` group.
+
+2. the Backup Chain Config argument must be within quotation marks so the shell doesn't interpret the `;` symbol as a separation between commands
 
 ## Supported Servers
 
