@@ -1,6 +1,6 @@
 # Backup Uploader
 
-A simple command that uploads files, with a focus on backup files, to a cloud server, allowing to have different directories that store backups with different keeping policies.
+A simple command that uploads files, with a focus on backup files, to a cloud server, allowing to have different directories that store backups with different retain policies.
 
 ## Backup Chain
 
