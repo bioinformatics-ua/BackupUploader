@@ -51,10 +51,7 @@ def parse_chain_config_file(config_text, chain: BackupChain):
                     counter_max,
                 )
         else:
-            chain.last(
-                strftime_format,
-                name,
-            )
+            chain.set_last(strftime_format, name)
             break
 
     if duplicated_names:

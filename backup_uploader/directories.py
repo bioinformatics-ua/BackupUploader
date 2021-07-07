@@ -4,6 +4,8 @@ import sys
 from datetime import datetime
 from typing import Optional
 
+import click
+
 
 class Directory:
     client = None
@@ -36,25 +38,43 @@ class Counters:
     def __init__(self, app_name):
         self.updates = False
 
-        self._file_name = f"/var/lib/{app_name}/counters.json"
+        self._file_name = f"/var/lib/backup_uploader/{app_name}.json"
 
         try:
             with open(self._file_name) as counters_file:
                 try:
                     self._json = json.load(counters_file)
                 except json.decoder.JSONDecodeError:
-                    print("Counters file with invalid json format", file=sys.stderr)
+                    click.echo(f'Counters file "{self._file_name}" with invalid json format', err=True)
                     sys.exit(2)
         except FileNotFoundError:
-            print("Counters file not found", file=sys.stderr)
-            sys.exit(2)
+            self._json = {}
+            self.updates = True
         except PermissionError:
-            print("Not read permission on counters file", file=sys.stderr)
+            click.echo(f'Unable to read on counters file "{self._file_name}"', err=True)
             sys.exit(2)
 
-        if not os.access(self._file_name, os.W_OK):
-            print("Not write permission on counters file", file=sys.stderr)
+        old_mask = os.umask(0o002)
+        try:
+            with open(self._file_name, "a+"):  # test if I can write/create the file to later save
+                pass
+        except FileNotFoundError:
+            click.echo(
+                "The directory /var/lib/backup_uploader does not exist.\n"
+                'Run sudo sh -c "useradd backup_uploader && '
+                'mkdir /var/lib/backup_uploader && '
+                'chown backup_uploader:backup_uploader /var/lib/backup_uploader" '
+                'to create it and the respective backup_uploader user and group.'
+            )
+        except PermissionError:
+            click.echo(
+                f'Unable to create/write on counters file "{self._file_name}".\n'
+                'The user running this script should belong to the "backup_uploader" group.',
+                err=True,
+            )
             sys.exit(2)
+        finally:
+            os.umask(old_mask)
 
     def inc(self, name):
         if name not in self._json:
@@ -72,5 +92,9 @@ class Counters:
 
     def save(self):
         if self.updates:
-            with open(self._file_name, "w") as counters_file:
-                json.dump(self._json, counters_file)
+            old_mask = os.umask(0o002)
+            try:
+                with open(self._file_name, "w+") as counters_file:
+                    json.dump(self._json, counters_file)
+            finally:
+                os.umask(old_mask)

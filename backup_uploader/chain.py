@@ -17,14 +17,19 @@ class BackupChain:
         self._directories.append(Directory(strftime_format, name, capacity, counter_max))
         return self
 
-    def last(self, strftime_format: str, name: Optional[str] = None):
+    def set_last(self, strftime_format: str, name: Optional[str] = None):
         self._last = LastDirectory(strftime_format, name)
+
+    def _first(self):
+        if self._directories:
+            return self._directories[0]
+        return self._last
 
     def empty(self):
         return len(self._directories) == 0
 
     def store(self, filename):
-        self._client.upload_file(filename, self._directories[0])
+        self._client.upload_file(filename, self._first())
 
         for i, directory in enumerate(self._directories):
             if i != 0:
@@ -43,7 +48,9 @@ class BackupChain:
                 self._client.delete_file(oldest_file)
                 return
 
-        if self.last is not None:
-            self._client.move_file(file, self._last)
+        if self._last is not None:
+            if self._directories:
+                self._client.move_file(file, self._last)
+            # if there is no intermediary directories the file was already written to the last directory
         else:
             self._client.delete_file(file)
