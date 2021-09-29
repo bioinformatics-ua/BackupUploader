@@ -9,7 +9,7 @@ import dropbox.files
 
 class DropboxClient(BaseClient):
 
-    CHUNKS_SIZES = 1 * 1024 * 1024  # 5 MB
+    CHUNK_SIZE = 1 * 1024 * 1024  # 5 MB
 
     def __init__(self, app_name):
         super(DropboxClient, self).__init__(app_name)
@@ -66,35 +66,34 @@ class DropboxClient(BaseClient):
         dir_name = self.get_or_create_directory(directory.name)
 
         with open(filename, "rb") as file:
-            data = file.read(self.CHUNKS_SIZES)
+            data = file.read(self.CHUNK_SIZE)
             upload_session_result = self._client.files_upload_session_start(data)
-            offset = len(data)
+            cursor = dropbox.files.UploadSessionCursor(
+                upload_session_result.session_id,
+                file.tell(),
+            )
 
             while True:
-                data = file.read(self.CHUNKS_SIZES)
+                cursor.offset = file.tell()
+
+                data = file.read(self.CHUNK_SIZE)
 
                 if not data:
                     break
 
                 self._client.files_upload_session_append_v2(
                     data,
-                    dropbox.files.UploadSessionCursor(
-                        upload_session_result.session_id,
-                        offset,
-                    ),
+                    cursor,
                 )
 
-        self._client.files_upload_session_finish(
-            b"",
-            dropbox.files.UploadSessionCursor(
-                upload_session_result.session_id,
-                offset,
-            ),
-            dropbox.files.CommitInfo(
-                f"{dir_name}/{directory.generate_name()}",
-                autorename=True,
+            self._client.files_upload_session_finish(
+                b"",
+                cursor,
+                dropbox.files.CommitInfo(
+                    f"{dir_name}/{directory.generate_name()}",
+                    autorename=True,
+                )
             )
-        )
 
     def delete_file(self, file):
         self._client.files_delete_v2(file.path_display)
