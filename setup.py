@@ -8,7 +8,7 @@ setup(
         "backup_uploader.clients.mega",
     ]),
     license="MIT",
-    version="0.1.3",
+    version="0.2.0",
     url="https://github.com/aspedrosa/BackupsUploader",
     author="André Pedrosa",
     author_email="aspedr0sa@protonmail.com",
