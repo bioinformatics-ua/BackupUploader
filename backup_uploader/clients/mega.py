@@ -1,3 +1,4 @@
+import datetime
 import sys
 
 import mega
@@ -60,7 +61,9 @@ class MegaClient(BaseClient):
                 directory.id = directory.id[directory.name]
 
         self._client.move(file, directory.id)
-        self._client.rename(file, directory.generate_name())
+        self._client.rename(
+            file, directory.generate_name(datetime.datetime.fromtimestamp(file[1]["ts"]))
+        )
 
     def upload_file(self, filename, directory: Directory):
         dest = self.get_or_create_directory(directory.name)

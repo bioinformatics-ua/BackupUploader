@@ -24,8 +24,10 @@ class Directory:
         self.capacity = capacity
         self.counter_max = counter_max
 
-    def generate_name(self):
-        return datetime.now().strftime(self._strftime_format)
+    def generate_name(self, file_upload_date: Optional[datetime] = None):
+        if file_upload_date is None:
+            file_upload_date = datetime.now()
+        return file_upload_date.strftime(self._strftime_format)
 
 
 class LastDirectory(Directory):

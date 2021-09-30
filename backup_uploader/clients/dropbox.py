@@ -40,7 +40,7 @@ class DropboxClient(BaseClient):
         try:
             self._client.files_create_folder_v2(name)
         except dropbox.exceptions.ApiError:
-            pass
+            pass  # already exists
 
         return name
 
@@ -58,7 +58,7 @@ class DropboxClient(BaseClient):
 
         self._client.files_move_v2(
             file.path_display,
-            f"{dir_name}/{directory.generate_name()}",
+            f"{dir_name}/{directory.generate_name(file.client_modified)}",
             autorename=True,
         )
 
