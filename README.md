@@ -34,9 +34,18 @@ For example, we can have three directories: week, month, olds.
    You can install them along with this package like this `pip install backup_uploader[dropbox]`. Use the value of the Server Argument point on the [Supported Servers](#supported-servers) section of the target cloud server.
 
 2. Create the counters directory
+   1. Create a `backup_uploader` group;
+   2. Create a `/var/lib/backup_uploader` directory;
+   3. Change the ownership to the `backup_uploader` user/group;
+   4. Grive write permissions to the `backup_uploader` group;
+   5. Add the user you will execute the backup.sh script to the `backup_uploader` group. You need to logout and log back in so this steps takes effect.
    
    ```shell
-   sudo sh -c "useradd backup_uploader && mkdir /var/lib/backup_uploader && chown backup_uploader:backup_uploader /var/lib/backup_uploader"
+   sudo sh -c "useradd backup_uploader \
+            && mkdir /var/lib/backup_uploader \
+            && chown backup_uploader:backup_uploader /var/lib/backup_uploader \
+            && chmod 775 /var/lib/backup_uploader \
+            && usermod -a -G backup_uploader $USER"
    ```
 
 ## Usage
