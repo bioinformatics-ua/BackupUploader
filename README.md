@@ -25,13 +25,9 @@ For example, we can have three directories: week, month, olds.
 
 ## Install
 
-1. Install the python package
+1. Install the python package and the associated python client for the target could server:
    
-   `pip install backup_uploader[SERVER]`
-   
-   Since each cloud server has a different upload API, you will also need to install a python client of the target cloud server.
-   
-   You can install them along with this package like this `pip install backup_uploader[dropbox]`. Use the value of the Server Argument point on the [Supported Servers](#supported-servers) section of the target cloud server.
+   You can install both when installing this package like this `pip install backup_uploader[dropbox]`. Use the value of the Server Argument point on the [Supported Servers](#supported-servers) section of the target cloud server.
 
 2. Create the counters directory
    1. Create a `backup_uploader` group;
