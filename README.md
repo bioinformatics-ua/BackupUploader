@@ -27,7 +27,7 @@ For example, we can have three directories: week, month, olds.
 
 1. Install the python package
    
-   `pip install backup_uploader`
+   `pip install backup_uploader[SERVER]`
    
    Since each cloud server has a different upload API, you will also need to install a python client of the target cloud server.
    
