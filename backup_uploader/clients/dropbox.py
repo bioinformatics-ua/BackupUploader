@@ -1,4 +1,4 @@
-from backup_uploader.clients.base import BaseClient
+﻿from backup_uploader.clients.base import BaseClient
 from backup_uploader.clients.exceptions import UnableToLogin
 from backup_uploader.directories import Directory
 
@@ -9,7 +9,7 @@ import dropbox.files
 
 class DropboxClient(BaseClient):
 
-    CHUNK_SIZE = 1 * 1024 * 1024  # 5 MB
+    CHUNK_SIZE = 100 * 1024 * 1024  # 100 MB
 
     def __init__(self, app_name):
         super(DropboxClient, self).__init__(app_name)
