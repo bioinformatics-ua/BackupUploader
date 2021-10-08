@@ -1,4 +1,9 @@
 from setuptools import setup, find_packages
+import json
+import os
+
+with open(os.path.join(os.path.dirname(__file__), "version.json")) as version_file:
+    version = json.load(version_file)["version"]
 
 setup(
     name="backup_uploader",
@@ -8,7 +13,7 @@ setup(
         "backup_uploader.clients.mega",
     ]),
     license="MIT",
-    version="0.4.0",
+    version=version,
     url="https://github.com/aspedrosa/BackupsUploader",
     author="André Pedrosa",
     author_email="aspedr0sa@protonmail.com",
