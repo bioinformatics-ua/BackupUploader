@@ -65,13 +65,15 @@ class Counters:
                 "The directory /var/lib/backup_uploader does not exist.\n"
                 'Run sudo sh -c "useradd backup_uploader && '
                 'mkdir /var/lib/backup_uploader && '
-                'chown backup_uploader:backup_uploader /var/lib/backup_uploader" '
+                'chown backup_uploader:backup_uploader /var/lib/backup_uploader && '
+                'chmod 775 /var/lib/backup_uploader" '
                 'to create it and the respective backup_uploader user and group.'
             )
         except PermissionError:
             click.echo(
                 f'Unable to create/write on counters file "{self._file_name}".\n'
-                'The user running this script should belong to the "backup_uploader" group.',
+                'The user running this script should belong to the "backup_uploader" group. '
+                'Run sudo sh -c "usermod -a -G backup_uploader $USER".',
                 err=True,
             )
             sys.exit(2)
