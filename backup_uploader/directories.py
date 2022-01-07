@@ -58,8 +58,9 @@ class Counters:
 
         old_mask = os.umask(0o002)
         try:
-            with open(self._file_name, "a+"):  # test if I can write/create the file to later save
-                pass
+            with open(self._file_name, "a+") as f:  # test if I can write/create the file to later save
+                if f.tell() == 0:
+                    f.write("{}")
         except FileNotFoundError:
             click.echo(
                 "The directory /var/lib/backup_uploader does not exist.\n"
