@@ -1,4 +1,5 @@
 import importlib
+import importlib.util
 import sys
 
 import click
@@ -52,10 +53,15 @@ def main(
     counters = Counters(app_name)
 
     client = client.lower()
+
+    if not importlib.util.find_spec(f"backup_uploader.clients.{client}"):
+        click.echo(f"Unknown client {client}", err=True)
+        return 1
+
     try:
         client_module = importlib.import_module(f"backup_uploader.clients.{client}")
     except ImportError:
-        click.echo(f"Unknown client clients.{client}", err=True)
+        click.echo(f"Missing python package for client {client}", err=True)
         return 1
     client = getattr(client_module, f"{client.title()}Client")(app_name)
 
