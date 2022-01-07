@@ -9,8 +9,7 @@ setup(
     name="backup_uploader",
     packages=find_packages(include=[
         "backup_uploader",
-        "backup_uploader.clients.dropbox",
-        "backup_uploader.clients.mega",
+        "backup_uploader.clients",
     ]),
     license="MIT",
     version=version,
